@@ -1,6 +1,15 @@
 # Fun things I discovered during research
 This is a collection of fun useful things that I found while doing research.
 
+## IDA Scripts to Make Your Life Easier (TM)
+* [define_code_functions.py](./ida_scripts/define_code_functions.py)
+  * This function will automatically define functions based off of basic pattern matching for functions
+  * Helps when IDA's autoanalysis engine throws a fit and thinks that functions end earlier than they actually do
+* [make_strings.py](./ida_scripts/make_strings.py)
+  * This will try to find strings embedded within a binary by searching for valid ASCII text, and a common delimiter (`\r\n`, or the like)
+  * Sometimes IDA doesn't want to find valid strings either >_>
+* Coming soon: A .idc to automatically define the segments for a Vex V5 brain
+  * Stay tuned
 ## Getting a JavaScript shell on any nw.js-packed binaries
 Unfortunately, you can't just pop Dev Tools on `nw.js` binaries, as they've had the Inspector support
 thoroughly gutted (to the point where you can't even get it to listen via `inspector.open`). So, to be able to tinker around,

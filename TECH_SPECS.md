@@ -1,7 +1,7 @@
 # VEX V5
 ## Main CPU
 * CPU: Xilinx Zynq XC7Z010-3CLG400E (Xilinx Zynq 7000-series)
-* Dual-core 32-bit ARM A9 (V7-A with NEON)
+* Dual-core 32-bit ARM Cortex-A9 r3p0 (ARMv7-A with NEON)
   * VEXos is proported to run on CPU #0, and user code runs on CPU #1
 * 64 KB of L1 cache
 * 512 KB of L2 cache
@@ -42,19 +42,19 @@ Bluetooth 4.2, VEXnet 3.0 (???)
   * Contains 3 sections
     * Section 0 (or, what I've come to call .data) is executable code mapped at 0x03400000 - 0x0349C014
     * Section 1 (unclear what this contains) is mapped at 0x037C000 - 0x037FD040
-    * Section 2 (appears to be a code signature) is mapped at 0x03800000 - 0x03800050
+    * Section 2 (user code segment stub) is mapped at 0x03800000 - 0x03800050
 * system_0.elf is shared between CPU0 / CPU1
   * On startup, a register is checked to see what CPU we're currently executing on:
 
     <img src="./images/fw_bringup.png" alt="A code snippet showing the bringup procedure for the VEX V5 Brain" width="500"/>
 
-    `__mrc(15, 0, 0, 0, 5) & 0xF` checks the `CPUID` bits [Multiprocessor Affinity Register](https://developer.arm.com/documentation/ddi0464/d/System-Control/Register-descriptions/Multiprocessor-Affinity-Register?lang=en) to see what processor we're currently running on
+    `__mrc(15, 0, 0, 0, 5) & 0xF` checks the `CPUID` bits in the [Multiprocessor Affinity Register](https://developer.arm.com/documentation/ddi0464/d/System-Control/Register-descriptions/Multiprocessor-Affinity-Register?lang=en) to see what processor we're currently running on
     
     If we're CPU0, hold the processor in an idle state for now. If we're CPU1, then proceed to initialize & set everything up.
   * Not sure if CPU0 is brought out of this idle state at some other point
     * It probably is, just need to find where
+    * This is typically done using the [Power State Coordination Interface](https://developer.arm.com/Architectures/Power%20State%20Coordination%20Interface) - 
   * CPU1 actually does most of the initialization work for some Reason
-
 
 ## Further reading:
 * [zynq-mkbootimage](https://github.com/antmicro/zynq-mkbootimage)
@@ -65,6 +65,6 @@ Bluetooth 4.2, VEXnet 3.0 (???)
 * [Xilinx Zynq 7000 SoC Technical Reference Manual](https://docs.xilinx.com/r/en-US/ug585-zynq-7000-SoC-TRM)
 * [Xilinx Zynq 7000 SoC Software Developers Guide](https://docs.xilinx.com/v/u/en-US/ug821-zynq-7000-swdev)
 * [Xilinx Zynq 7000 SoC Boot and Configuration](https://docs.xilinx.com/r/en-US/ug1400-vitis-embedded/Zynq-7000-SoC-Boot-and-Configuration)
-* [Cortex-A7 MPCore Technical Reference Manual r0p3](https://developer.arm.com/documentation/ddi0464/d?lang=en)
+* [Cortex A9 MPCore Technical Reference Manual r3p0](https://developer.arm.com/documentation/ddi0407/g/?lang=en)
 * [logiCVC-ML Compact Multilayer Video Controller](https://www.logicbricks.com/Products/logiCVC-ML.aspx)
 
